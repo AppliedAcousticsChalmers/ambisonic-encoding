@@ -1,0 +1,30 @@
+function [s_breve] = get_sound_field_sh_coeffs_from_sma_t(array_signals, sma_inv_rf_t, N, beta, alpha, grid_weights, sphharm_type)
+%
+% It makes no real sense to use it with anything other than sphharm_type =
+% 'real'.
+%
+% The equation numbers refer to 
+%
+%   Jens Ahrens, "Ambisonic Encoding of Signals From Spherical Microphone
+%   Arrays," Technical note v. 1, Chalmers University of Technology, 2022.
+%
+% Written by Jens Ahrens, 2022
+
+% --------------------------- Evaluate Eq. (10) ---------------------------
+
+s_breve = zeros(size(array_signals, 1), (N+1)^2);
+
+for n = 0 : N 
+    for m = -n : n        
+        
+        s_breve(:, n^2+n+m+1) = sum(array_signals .* repmat(grid_weights .* sphharm(n, m, beta, alpha, sphharm_type), [size(array_signals, 1) 1]), 2) * 4*pi;
+        s_breve(:, n^2+n+m+1) = fftfilt(sma_inv_rf_t(:, n+1), s_breve(:, n^2+n+m+1));
+        
+    end
+end
+
+end
+
+
+
+
