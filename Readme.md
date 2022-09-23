@@ -1,4 +1,4 @@
-# Ambisonic Encoding of Signals From Higher-Odrer Microphone Arrays
+# Ambisonic Encoding of Signals From Higher-Order Microphone Arrays
 
 ## Spherical Microphone Arrays With a Spherical Baffle
 
@@ -6,7 +6,7 @@ The MATLAB script `render_sma_to_ambisonics.m` demonstrates how to compute ambis
 
 The underlying concept was presented in the literature in many locations in different variants. The present implementation uses definitions of the involved quantities such that the resulting ambisonic signals ares compatible with software tools like [SPARTA](https://leomccormack.github.io/sparta-site/) and the [IEM Plugin Suite](https://plugins.iem.at/). The mathematical formulation is summarized in
 
-> J. Ahrens, "Ambisonic Encoding of Signals From Spherical Microphone Arrays," Technical note v. 1, Chalmers University of Technology, Aug. 2022. [[pdf]](arxive.org).
+> J. Ahrens, "Ambisonic Encoding of Signals From Spherical Microphone Arrays," Technical note v. 1, Chalmers University of Technology, Aug. 2022 [[pdf]](arxive.org).
 
 If you execute the script then the microphone signals from [this recording](https://youtu.be/qcqeygqjxZ4?t=31) will be encoded into ambisonics. Additionally, a binaural preview will be computed, which is a binaural rendering of those ambisonic signals while assuming that the listener is looking straight. Note that the result of this computation is already included in the repository (`out_ambisonics.wav` and `out_sma_binaural.wav`) (Actually, by default, `out_ambisonics.wav` contains the encoding from the EMA presented here below. That one is much higher order, and I like it even more). You'll need to download the employed HRIRs from [here](https://zenodo.org/record/3928297/files/HRIR_L2702.sofa?download=1) and store them in the subfolder `resources` as well as the SOFA MATLAB API from [here](https://sourceforge.net/projects/sofacoustics/) for being able to compute the binaural preview yourself. The ambisonic encoding works either way.
 
@@ -23,16 +23,16 @@ In Reaper,
 
 The MATLAB script `render_ema_to_ambisonics.m` demonstrates how to compute ambisonic signals from the signals that are captured by the microphones of an equatorial microphone array (EMA). The underlying concept was originally presented in
 
-> J. Ahrens, H. Helmholz, D. L. Alon, S. V. Amengual Garí, “Spherical Harmonic Decomposition of a Sound Field Based on Observations Along the Equator of a Rigid Spherical Scatterer” in J. Acoust. Soc. Am. 150(2), 2021. [[pdf]](http://www.soundfieldsynthesis.org/wp-content/uploads/pubs/Ahrens_etal_JASA2021.pdf)
+> J. Ahrens, H. Helmholz, D. L. Alon, S. V. Amengual Garí, “Spherical Harmonic Decomposition of a Sound Field Based on Observations Along the Equator of a Rigid Spherical Scatterer” in J. Acoust. Soc. Am. 150(2), 2021 [[pdf]](http://www.soundfieldsynthesis.org/wp-content/uploads/pubs/Ahrens_etal_JASA2021.pdf).
 
 The MATLAB script uses a reformulation of the equatorial array solution that is again compatible with software tools like [SPARTA](https://leomccormack.github.io/sparta-site/) and the [IEM Plugin Suite](https://plugins.iem.at/). The details are described in 
 
-> J. Ahrens, "Ambisonic Encoding of Signals From Equatorial Microphone Arrays," Technical note v. 1, Chalmers University of Technology, Aug. 2022. [[pdf]](arxive.org).
+> J. Ahrens, "Ambisonic Encoding of Signals From Equatorial Microphone Arrays," Technical note v. 1, Chalmers University of Technology, Aug. 2022 [[pdf]](arxive.org).
 
 If you execute the scripts then the microphone signals from [this recording](https://youtu.be/95qDd13pVVY?t=58) will be encoded into 7th-order ambisonics and stored in the file `out_ambisonics.wav`, which is the same file that is mentioned above (it is getting overwritten). Start Reaper after computing the signals so that it loads the updated ones. The binaural preview will be stored in `out_ema_binaural.wav`.
 
 
 
 ## License
-The content of this repository is licensed under the GPLv3+. Please consult the file LICENSE for more information about this license.
+The content of this repository is licensed under the terms of the MIT license. Please consult the file LICENSE for more information about this license.
  

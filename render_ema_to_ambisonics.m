@@ -42,8 +42,8 @@ k = 2*pi*f/c;
 
 % -------------------- Precompute the radial filters ----------------------
 
-gain_limit_radial_filters_dB = 40; % This is equivalent to 20 dB for the SMA.
-reg_type_radial_filters = 'soft'; % 'soft', 'hard', 'moreau'
+gain_limit_radial_filters_dB = 40; % This is equivalent to 18 dB for the SMA.
+reg_type_radial_filters = 'moreau'; % 'soft', 'hard', 'moreau'
 
 [~, ema_inv_rf_t] = get_ema_radial_filters(k, R, N, gain_limit_radial_filters_dB, reg_type_radial_filters, hankel_type, sphharm_type);
 

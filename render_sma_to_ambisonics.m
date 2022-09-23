@@ -37,13 +37,13 @@ k = 2*pi*f/c;
 % ---------------------- Precompute radial filters ------------------------
 
 gain_limit_radial_filters_dB = 20;
-reg_type_radial_filters = 'soft'; % 'soft', 'hard', 'moreau'
+reg_type_radial_filters = 'moreau'; % 'soft', 'hard', 'moreau'
 
-[~, sma_inv_rf_t] = get_sma_radial_filters(k, R, N, gain_limit_radial_filters_dB, reg_type_radial_filters, hankel_type);
+[~, ~, b_n_inv_t] = get_sma_radial_filters(k, R, N, gain_limit_radial_filters_dB, reg_type_radial_filters, hankel_type);
 
 % ------------------------ Get the ambisonic signals ----------------------
 
-ambi_signals = get_sound_field_sh_coeffs_from_sma_t(array_signals, sma_inv_rf_t, N, beta_sma, alpha_sma, grid_weights_array, sphharm_type);
+ambi_signals = get_sound_field_sh_coeffs_from_sma_t(array_signals, b_n_inv_t, N, beta_sma, alpha_sma, grid_weights_array, sphharm_type);
 
 % --------------------- Normalize the ambisonic signals -------------------
 

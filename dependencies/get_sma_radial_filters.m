@@ -1,6 +1,8 @@
-function [sma_inv_rf, sma_inv_rf_t] = get_sma_radial_filters(k, R, N, limit_db, reg_type, hankel_type)
-% ema_inv_rf and ema_inv_rf_t are the 1st factor on the right hand side of
-% Eq. (15). They are causal (they comprise comprises a modeling delay).
+function [b_n, b_n_inv, b_n_inv_t] = get_sma_radial_filters(k, R, N, limit_db, reg_type, hankel_type)
+% b_n is given by Eq. (6). b_n_inv and b_n_inv_t are the inverse of that in
+% frequency domain and time domain, respectively.
+%
+% b_n_inv and b_n_inv_t are causal (they comprise a modeling delay).
 %
 % The equation numbers refer to 
 % 
@@ -12,7 +14,7 @@ function [sma_inv_rf, sma_inv_rf_t] = get_sma_radial_filters(k, R, N, limit_db, 
 % ----------------------- compute the terms b_n, Eq. (6) ------------------
 b_n = zeros(size(k, 1), N+1);
 
-kR = k.*R;
+kR = k.*R + 5*eps; % add 5*eps to avoid undefined values for the Hankel function
 
 for n = 0 : N
        
@@ -29,7 +31,7 @@ for n = 0 : N
 end
 
 
-sma_inv_rf = 1./b_n;
+b_n_inv = 1./b_n;
 
 % ----------------------------- limiting ----------------------------------
 if limit_db < inf
@@ -37,12 +39,12 @@ if limit_db < inf
     % --- soft clipping ---
     if strcmp(reg_type, 'soft')
     
-        sma_inv_rf = (2*10^(limit_db/20)) / pi * sma_inv_rf ./ abs(sma_inv_rf) .* atan(pi/(2*10^(limit_db/20)) .* abs(sma_inv_rf));
+        b_n_inv = (2*10^(limit_db/20)) / pi * b_n_inv ./ abs(b_n_inv) .* atan(pi/(2*10^(limit_db/20)) .* abs(b_n_inv));
         
     % --- hard clipping ---
     elseif strcmp(reg_type, 'hard')
         
-        sma_inv_rf(abs(sma_inv_rf) > 10^(limit_db/20)) = sma_inv_rf(abs(sma_inv_rf) > 10^(limit_db/20)) ./ abs(sma_inv_rf(abs(sma_inv_rf) > 10^(limit_db/20))) * 10^(limit_db/20); 
+        b_n_inv(abs(b_n_inv) > 10^(limit_db/20)) = b_n_inv(abs(b_n_inv) > 10^(limit_db/20)) ./ abs(b_n_inv(abs(b_n_inv) > 10^(limit_db/20))) * 10^(limit_db/20); 
         
     % --- Moreau regularization (Moreau, Daniel, Bertet, AES 2006) ---
     elseif strcmp(reg_type, 'moreau')
@@ -50,7 +52,7 @@ if limit_db < inf
        limit          = 10^(limit_db/20);
        lambda_squared = (1 - sqrt(1 - 1/limit^2)) ./ (1 + sqrt(1 - 1/limit^2));
        
-       sma_inv_rf     = conj(b_n) ./ (abs(b_n).^2 + lambda_squared);      
+       b_n_inv     = conj(b_n) ./ (abs(b_n).^2 + lambda_squared);      
     
     else
         
@@ -62,27 +64,17 @@ end
 
 % --------------------------- make filters causal -------------------------
 
-spec       = [sma_inv_rf; conj(flipud(sma_inv_rf(2:end-1, :)))];
-spec(1, :) = abs(spec(2, :)); % fix DC
+b_n_inv_sym = [b_n_inv; conj(flipud(b_n_inv(2:end-1, :)))];
 
-sma_inv_rf_t = ifft(spec, 'symmetric'); 
+b_n_inv_t = ifft(b_n_inv_sym, 'symmetric'); 
 
-filter_length = size(sma_inv_rf_t, 1);
+filter_length = size(b_n_inv_t, 1);
 
 % make causal (we assume that the filter_length is 2048 or longer)
-sma_inv_rf_t = circshift(sma_inv_rf_t, [filter_length/2 0]);
+b_n_inv_t = circshift(b_n_inv_t, [filter_length/2 0]);
 
-% fade in and out
-window = hann(400);
-fade_in = window(1:end/2);
-fade_out = window(end/2+1:end);
-
-% apply fade window
-sma_inv_rf_t(1:200, :)         = sma_inv_rf_t(1:200, :)         .* repmat(fade_in,  [1 size(sma_inv_rf_t, 2)]);
-sma_inv_rf_t(end-200+1:end, :) = sma_inv_rf_t(end-200+1:end, :) .* repmat(fade_out, [1 size(sma_inv_rf_t, 2)]);
-
-spec = fft(sma_inv_rf_t);
-sma_inv_rf = spec(1:end/2+1, :);
+b_n_inv = fft(b_n_inv_t);
+b_n_inv = b_n_inv(1:end/2+1, :);
 
 end
 

@@ -1,5 +1,8 @@
 function [s_breve] = get_sound_field_sh_coeffs_from_sma_t(array_signals, sma_inv_rf_t, N, beta, alpha, grid_weights, sphharm_type)
 %
+% The function assumes that the grid_weights are normalized such that they 
+% sum up to 1.
+%
 % It makes no real sense to use it with anything other than sphharm_type =
 % 'real'.
 %

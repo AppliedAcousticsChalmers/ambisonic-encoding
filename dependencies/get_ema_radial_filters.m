@@ -1,6 +1,8 @@
 function [ema_inv_rf, ema_inv_rf_t] = get_ema_radial_filters(k, R, N, limit_db, reg_type, hankel_type, sphharm_type)
 % ema_inv_rf and ema_inv_rf_t are the 1st factor on the right hand side of
-% Eq. (13). They are causal (they comprise comprises a modeling delay).
+% Eq. (13) in frequency and time domain respectively. 
+%
+% They are causal (they comprise a modeling delay).
 %
 % The equation numbers refer to 
 % 
@@ -13,7 +15,7 @@ function [ema_inv_rf, ema_inv_rf_t] = get_ema_radial_filters(k, R, N, limit_db, 
 % ----------------------- Compute the terms b_n, Eq. (7) ------------------
 b_n = zeros(size(k, 1), N+1);
 
-kR = k.*R;
+kR = k.*R + 5*eps; % add 5*eps to avoid undefined values for the Hankel function
 
 for n = 0 : N
        
@@ -85,27 +87,17 @@ end
 
 % --------------------------- make filters causal -------------------------
 
-spec       = [ema_inv_rf; conj(flipud(ema_inv_rf(2:end-1, :)))];
-spec(1, :) = abs(spec(2, :)); % fix DC
+ema_inv_rf_sym = [ema_inv_rf; conj(flipud(ema_inv_rf(2:end-1, :)))];
 
-ema_inv_rf_t = ifft(spec, [], 1, 'symmetric'); 
+ema_inv_rf_t = ifft(ema_inv_rf_sym, [], 1, 'symmetric'); 
 
 filter_length = size(ema_inv_rf_t, 1);
 
 % make causal (we assume that the filter_length is 2048 or longer)
 ema_inv_rf_t = circshift(ema_inv_rf_t, [filter_length/2 0]);
 
-% fade in and out
-window = hann(400);
-fade_in = window(1:end/2);
-fade_out = window(end/2+1:end);
-
-% apply fade window
-ema_inv_rf_t(1:200, :)         = ema_inv_rf_t(1:200, :)         .* repmat(fade_in,  [1 size(ema_inv_rf_t, 2)]);
-ema_inv_rf_t(end-200+1:end, :) = ema_inv_rf_t(end-200+1:end, :) .* repmat(fade_out, [1 size(ema_inv_rf_t, 2)]);
-
-spec = fft(ema_inv_rf_t, [], 1);
-ema_inv_rf = spec(1:end/2+1, :);
+ema_inv_rf = fft(ema_inv_rf_t, [], 1);
+ema_inv_rf = ema_inv_rf(1:end/2+1, :);
 
 end
 
