@@ -2,6 +2,8 @@ function [ema_inv_rf, ema_inv_rf_t] = get_ema_radial_filters(k, R, N, limit_db, 
 % ema_inv_rf and ema_inv_rf_t are the 1st factor on the right hand side of
 % Eq. (13) in frequency and time domain respectively. 
 %
+% reg_type: 'tikhonov', 'hard', 'soft'
+%
 % They are causal (they comprise a modeling delay).
 %
 % The equation numbers refer to 
@@ -32,6 +34,20 @@ for n = 0 : N
     end
     
 end
+
+% ----------------- catch possible NaNs (can occur for N > 19) ------------
+indices = find(isnan(b_n));
+
+if ~isempty(indices)
+    warning('%d occurrence(s) of NaN deteced in high-order radial filters. Applying a fix.', length(indices));
+
+   for index = indices()
+       % this usually occurs at the DC bin, so replace that one.
+       b_n(index) = real(b_n(index+1));    
+   end
+   
+end
+
 
 % ------------ Compute the inverse EMA radial filters, Eq. (13) -----------
 
@@ -69,8 +85,8 @@ if limit_db < inf
         
         ema_inv_rf(abs(ema_inv_rf) > 10^(limit_db/20)) = ema_inv_rf(abs(ema_inv_rf) > 10^(limit_db/20)) ./ abs(ema_inv_rf(abs(ema_inv_rf) > 10^(limit_db/20))) * 10^(limit_db/20); 
         
-    % --- Moreau regularization (Moreau, Daniel, Bertet, AES 2006) ---
-    elseif strcmp(reg_type, 'moreau')
+    % --- Tikhonov regularization as used in (Moreau, Daniel, Bertet, AES 2006) ---
+    elseif strcmp(reg_type, 'tikhonov')
         
        	limit          = 10^(limit_db/20);
         lambda_squared = (1 - sqrt(1 - 1/limit^2)) ./ (1 + sqrt(1 - 1/limit^2));

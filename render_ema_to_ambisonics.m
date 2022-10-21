@@ -43,7 +43,7 @@ k = 2*pi*f/c;
 % -------------------- Precompute the radial filters ----------------------
 
 gain_limit_radial_filters_dB = 40; % This is equivalent to 18 dB for the SMA.
-reg_type_radial_filters = 'moreau'; % 'soft', 'hard', 'moreau'
+reg_type_radial_filters = 'tikhonov';
 
 [~, ema_inv_rf_t] = get_ema_radial_filters(k, R, N, gain_limit_radial_filters_dB, reg_type_radial_filters, hankel_type, sphharm_type);
 
@@ -70,8 +70,12 @@ audiowrite(out_file_name, ambi_signals, fs);
 
 assert(strcmp(sphharm_type, 'real'));
 
+% You would usually want to equalize the binaural rendering to mitigate 
+% artifacts due to spherical harmonic order truncation and spatial
+% aliasing. We'll add this in the future. 
+
 head_orientation = 0;
-out_lr = render_ambi_signals_binaurally_t(ambi_signals, head_orientation, N);
+out_lr = render_ambi_signals_binaurally_t(ambi_signals, head_orientation, N, 'transform_integral');
 
 out_lr = out_lr / max(abs(out_lr(:)));
 out_file_name = 'out_ema_binaural.wav';  

@@ -2,6 +2,8 @@ function [b_n, b_n_inv, b_n_inv_t] = get_sma_radial_filters(k, R, N, limit_db, r
 % b_n is given by Eq. (6). b_n_inv and b_n_inv_t are the inverse of that in
 % frequency domain and time domain, respectively.
 %
+% reg_type: 'tikhonov', 'hard', 'soft'
+%
 % b_n_inv and b_n_inv_t are causal (they comprise a modeling delay).
 %
 % The equation numbers refer to 
@@ -26,11 +28,26 @@ for n = 0 : N
         b_n(:, n+1) =   4*pi * 1i^(-n) .* b_n(:, n+1);
     elseif hankel_type == 2
         b_n(:, n+1) = - 4*pi * 1i^n    .* b_n(:, n+1);
+    else 
+        error('Unknown hankel_type.');
     end
     
 end
 
+% ----------------- catch possible NaNs (can occur for N > 19) ------------
+indices = find(isnan(b_n));
 
+if ~isempty(indices)
+    warning('%d occurrence(s) of NaN deteced in high-order radial filters. Applying a fix.', length(indices));
+
+   for index = indices()
+       % this usually occurs at the DC bin, so replace that one.
+       b_n(index) = real(b_n(index+1));    
+   end
+   
+end
+
+% invert
 b_n_inv = 1./b_n;
 
 % ----------------------------- limiting ----------------------------------
@@ -46,8 +63,8 @@ if limit_db < inf
         
         b_n_inv(abs(b_n_inv) > 10^(limit_db/20)) = b_n_inv(abs(b_n_inv) > 10^(limit_db/20)) ./ abs(b_n_inv(abs(b_n_inv) > 10^(limit_db/20))) * 10^(limit_db/20); 
         
-    % --- Moreau regularization (Moreau, Daniel, Bertet, AES 2006) ---
-    elseif strcmp(reg_type, 'moreau')
+    % --- Tikhonov regularization as used in (Moreau, Daniel, Bertet, AES 2006) ---
+    elseif strcmp(reg_type, 'tikhonov')
         
        limit          = 10^(limit_db/20);
        lambda_squared = (1 - sqrt(1 - 1/limit^2)) ./ (1 + sqrt(1 - 1/limit^2));

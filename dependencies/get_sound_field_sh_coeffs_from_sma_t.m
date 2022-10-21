@@ -20,7 +20,13 @@ s_breve = zeros(size(array_signals, 1), (N+1)^2);
 for n = 0 : N 
     for m = -n : n        
         
+        % evaluate the transformation integral discretely
         s_breve(:, n^2+n+m+1) = sum(array_signals .* repmat(grid_weights .* sphharm(n, m, beta, alpha, sphharm_type), [size(array_signals, 1) 1]), 2) * 4*pi;
+        
+        % If the microphone placement grid is irregular, you might want to try a
+        % least-squares fit as performed in the script
+        % render_ambi_signals_binaurally_t.m.
+
         s_breve(:, n^2+n+m+1) = fftfilt(sma_inv_rf_t(:, n+1), s_breve(:, n^2+n+m+1));
         
     end
