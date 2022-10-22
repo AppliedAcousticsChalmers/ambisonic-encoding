@@ -19,6 +19,8 @@ In Reaper,
 - Set `Mode` to `Local port [receive only]`
 - Set `Local listen port`: `8000`
 
+Note that the example implementation of the rendering that we provide does not comprise any form of equalization, which is usually useful to mitigate the effects of spherical harmonic order truncation and spatial aliasing. Thamas Deppisch provides a MATLAB implementation of eMagLS on [his GitHub repository](https://github.com/thomasdeppisch/eMagLS) that does exactly this. 
+
 ## Equatorial Microphone Arrays With a Spherical Baffle
 
 The MATLAB script `render_ema_to_ambisonics.m` demonstrates how to compute ambisonic signals from the signals that are captured by the microphones of an equatorial microphone array (EMA). The underlying concept was originally presented in
@@ -31,7 +33,7 @@ The MATLAB script uses a reformulation of the equatorial array solution that is 
 
 If you execute the scripts then the microphone signals from [this recording](https://youtu.be/95qDd13pVVY?t=58) will be encoded into 7th-order ambisonics and stored in the file `out_ambisonics.wav`, which is the same file that is mentioned above (it is getting overwritten). Start Reaper after computing the signals so that it loads the updated ones. The binaural preview will be stored in `out_ema_binaural.wav`.
 
-
+We will shortly provide a MATLAB implementation of eMagLS for EMAs.
 
 ## License
 The content of this repository is licensed under the terms of the MIT license. Please consult the file LICENSE for more information about this license.
