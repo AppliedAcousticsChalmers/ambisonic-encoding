@@ -35,6 +35,8 @@ If you execute the scripts then the microphone signals from [this recording](htt
 
 We will shortly provide a MATLAB implementation of eMagLS for EMAs.
 
+We thank Reality Labs for funding the initial work on the EMA concept.
+
 ## License
 The content of this repository is licensed under the terms of the MIT license. Please consult the file LICENSE for more information about this license.
  
