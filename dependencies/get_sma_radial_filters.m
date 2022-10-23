@@ -42,7 +42,7 @@ if ~isempty(indices)
 
    for index = indices()
        % this usually occurs at the DC bin, so replace that one.
-       b_n(index) = real(b_n(index+1));    
+       b_n(index) = abs(b_n(index+1));    
    end
    
 end
