@@ -41,7 +41,7 @@ indices = find(isnan(b_n));
 if ~isempty(indices)
     warning('%d occurrence(s) of NaN deteced in high-order radial filters. Applying a fix.', length(indices));
 
-   for index = indices()
+   for index = indices
        % this usually occurs at the DC bin, so replace that one.
        b_n(index) = abs(b_n(index+1));    
    end
@@ -99,6 +99,19 @@ if limit_db < inf
         
     end
 
+end
+
+% ----- catch possible extra NaNs that can occur during the inversion -----
+indices = find(isnan(ema_inv_rf));
+
+if ~isempty(indices)
+    warning('%d more occurrence(s) of NaN deteced in high-order radial filters. Applying a fix.', length(indices));
+
+   for index = indices
+       % this usually occurs at the DC bin, so replace that one.
+       ema_inv_rf(index) = abs(ema_inv_rf(index+1));    
+   end
+   
 end
 
 % --------------------------- make filters causal -------------------------
