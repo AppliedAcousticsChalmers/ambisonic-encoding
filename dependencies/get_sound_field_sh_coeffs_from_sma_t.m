@@ -10,6 +10,7 @@ function [s_breve] = get_sound_field_sh_coeffs_from_sma_t(array_signals, sma_inv
 %
 %   Jens Ahrens, "Ambisonic Encoding of Signals From Spherical Microphone
 %   Arrays," Technical note v. 1, Chalmers University of Technology, 2022.
+%   https://arxiv.org/abs/2211.00583
 %
 % Written by Jens Ahrens, 2022
 

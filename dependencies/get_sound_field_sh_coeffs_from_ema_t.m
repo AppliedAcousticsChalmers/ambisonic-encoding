@@ -3,6 +3,7 @@ function [s_breve] = get_sound_field_sh_coeffs_from_ema_t(array_signals, ema_inv
 % 
 %   Jens Ahrens, "Ambisonic Encoding of Signals From Equatorial Microphone
 %   Arrays," Technical note v. 1, Chalmers University of Technology, 2022.
+%   https://arxiv.org/abs/2211.00584
 %
 % Written by Jens Ahrens, 2022
 

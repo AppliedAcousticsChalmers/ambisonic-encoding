@@ -17,6 +17,7 @@ clear;
 % 
 %   Jens Ahrens, "Ambisonic Encoding of Signals From Equatorial Microphone
 %   Arrays," Technical note v.1, Chalmers University of Technology, 2022.
+%   https://arxiv.org/abs/2211.00584
 %
 % (c) 2022 by Jens Ahrens
 

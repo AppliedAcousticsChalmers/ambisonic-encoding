@@ -9,11 +9,13 @@ function [out_lr] = render_ambi_signals_binaurally_t(ambi_signals, head_orientat
 % 
 %   Jens Ahrens, "Ambisonic Encoding of Signals From Spherical Microphone
 %   Arrays," Technical note v. 1, Chalmers University of Technology, 2022.
+%   https://arxiv.org/abs/2211.00583
 %
 % and/or
 %
 %   Jens Ahrens, "Ambisonic Encoding of Signals From Equatorial Microphone
 %   Arrays," Technical note v. 1, Chalmers University of Technology, 2022.
+%   https://arxiv.org/abs/2211.00584
 %
 % Written by Jens Ahrens, 2022
 

@@ -10,6 +10,7 @@ function [b_n, b_n_inv, b_n_inv_t] = get_sma_radial_filters(k, R, N, limit_db, r
 % 
 %   Jens Ahrens, "Ambisonic Encoding of Signals From Spherical Microphone
 %   Arrays," Technical note v. 1, Chalmers University of Technology, 2022.
+%   https://arxiv.org/abs/2211.00583
 %
 % Written by Jens Ahrens, 2022
 

@@ -10,6 +10,7 @@ function [ema_inv_rf, ema_inv_rf_t] = get_ema_radial_filters(k, R, N, limit_db, 
 % 
 %   Jens Ahrens, "Ambisonic Encoding of Signals From Equatorial Microphone
 %   Arrays," Technical note v. 1, Chalmers University of Technology, 2022.
+%   https://arxiv.org/abs/2211.00584
 %
 % Written by Jens Ahrens, 2022
 
