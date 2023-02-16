@@ -1,4 +1,4 @@
-function [ema_inv_rf, ema_inv_rf_t] = get_ema_radial_filters(k, R, N, limit_db, reg_type, hankel_type, sphharm_type)
+function [ema_inv_rf, ema_inv_rf_t] = get_ema_radial_filters(k, R, N, limit_db, reg_type, hankel_type)
 % ema_inv_rf and ema_inv_rf_t are the 1st factor on the right hand side of
 % Eq. (13) in frequency and time domain respectively. 
 %
@@ -55,19 +55,9 @@ end
 ema_rf = zeros(size(b_n, 1), 2*N+1);
 
 for m = -N : N
-
     for n_prime = abs(m) : N
-                
-        if strcmp(sphharm_type, 'complex')
-            ema_rf(:, m+N+1) = ema_rf(:, m+N+1) + b_n(:, n_prime+1) .* sphharm(n_prime, m, pi/2, 0, 'complex').^2;
-        elseif strcmp(sphharm_type, 'real')
-            ema_rf(:, m+N+1) = ema_rf(:, m+N+1) + b_n(:, n_prime+1) .* N_nm(n_prime, m, pi/2).^2;
-        else
-            error('Unknown sphharm_type.');
-        end
-        
+        ema_rf(:, m+N+1) = ema_rf(:, m+N+1) + b_n(:, n_prime+1) .* N_nm(n_prime, m, pi/2).^2;
     end
-    
 end
 
 

@@ -6,11 +6,12 @@ function [out] = N_nm(n, m, beta)
 %
 % Written by Jens Ahrens, 2022
 
-% Don't use 'real' here!
-out = sphharm(n, m, beta, 0, 'complex'); 
+Lnm = asslegendre(n, abs(m), cos(beta));
 
-% For the beauty: Remove stray imaginary part
-out = real(out);
+factor_1 = (2*n + 1) / (4*pi);
+factor_2 = factorial(n - abs(m)) ./ factorial(n + abs(m));
+
+out = (-1).^m .* sqrt(factor_1 .* factor_2) .* Lnm;
 
 end
 

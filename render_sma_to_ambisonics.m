@@ -26,7 +26,6 @@ load('resources/eigenmike_walking_around.mat');
 
 % ----------------------------- Preparations ------------------------------
 
-sphharm_type = 'real';
 hankel_type = 2; 
 
 radial_filter_length = 2048;
@@ -44,7 +43,7 @@ reg_type_radial_filters = 'tikhonov';
 
 % ------------------------ Get the ambisonic signals ----------------------
 
-ambi_signals = get_sound_field_sh_coeffs_from_sma_t(array_signals, b_n_inv_t, N, beta_sma, alpha_sma, grid_weights_array, sphharm_type);
+ambi_signals = get_sound_field_sh_coeffs_from_sma_t(array_signals, b_n_inv_t, N, beta_sma, alpha_sma, grid_weights_array);
 
 % --------------------- Normalize the ambisonic signals -------------------
 
@@ -59,12 +58,6 @@ audiowrite(out_file_name, ambi_signals, fs);
 
 % ------------------------ Create binaural preview ------------------------
 
-% The time-domain rendering function works only for sphharm_type = 'real'. 
-% It is not convenient to extend it to complex SHs because this would 
-% produce time-domain output signals that are complex.
-
-assert(strcmp(sphharm_type, 'real'));
-
 % You would usually want to equalize the binaural rendering to mitigate 
 % artifacts due to spherical harmonic order truncation and spatial
 % aliasing. We'll add this in the future. 
@@ -75,9 +68,6 @@ out_lr = render_ambi_signals_binaurally_t(ambi_signals, head_orientation, N, 'tr
 out_lr = out_lr / max(abs(out_lr(:))) * 0.99; % normalize the binaural signal
 out_file_name = 'out_sma_binaural.wav';  
 audiowrite(out_file_name, out_lr, fs);
-
-
-
 
 
 

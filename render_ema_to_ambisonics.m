@@ -32,7 +32,6 @@ load('resources/ema_recording_chalmers.mat');
 
 % ----------------------------- Preparations ------------------------------
 
-sphharm_type = 'real';
 hankel_type = 2; 
 
 radial_filter_length = 2048;
@@ -46,11 +45,11 @@ k = 2*pi*f/c;
 gain_limit_radial_filters_dB = 40; % This is equivalent to 18 dB for the SMA.
 reg_type_radial_filters = 'tikhonov';
 
-[~, ema_inv_rf_t] = get_ema_radial_filters(k, R, N, gain_limit_radial_filters_dB, reg_type_radial_filters, hankel_type, sphharm_type);
+[~, ema_inv_rf_t] = get_ema_radial_filters(k, R, N, gain_limit_radial_filters_dB, reg_type_radial_filters, hankel_type);
 
 % ------------------------ Get the ambisonic signals ----------------------
 
-ambi_signals = get_sound_field_sh_coeffs_from_ema_t(array_signals, ema_inv_rf_t, N, alpha_ema, sphharm_type);
+ambi_signals = get_sound_field_sh_coeffs_from_ema_t(array_signals, ema_inv_rf_t, N, alpha_ema);
 
 % --------------------- Normalize the ambisonic signals -------------------
 
@@ -64,12 +63,6 @@ out_file_name = 'out_ambisonics.wav';
 audiowrite(out_file_name, ambi_signals, fs);
 
 % ------------------------ Create binaural preview ------------------------
-
-% The time-domain rendering function works only for sphharm_type = 'real'. 
-% It is not convenient to extend it to complex SHs because this would 
-% produce time-domain output signals that are complex.
-
-assert(strcmp(sphharm_type, 'real'));
 
 % You would usually want to equalize the binaural rendering to mitigate 
 % artifacts due to spherical harmonic order truncation and spatial

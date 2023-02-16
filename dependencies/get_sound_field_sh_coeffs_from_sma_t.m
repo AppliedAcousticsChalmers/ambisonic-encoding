@@ -1,4 +1,4 @@
-function [s_breve] = get_sound_field_sh_coeffs_from_sma_t(array_signals, sma_inv_rf_t, N, beta, alpha, grid_weights, sphharm_type)
+function [s_breve] = get_sound_field_sh_coeffs_from_sma_t(array_signals, sma_inv_rf_t, N, beta, alpha, grid_weights)
 %
 % The function assumes that the grid_weights are normalized such that they 
 % sum up to 1.
@@ -22,7 +22,7 @@ for n = 0 : N
     for m = -n : n        
         
         % evaluate the transformation integral discretely
-        s_breve(:, n^2+n+m+1) = sum(array_signals .* repmat(grid_weights .* sphharm(n, m, beta, alpha, sphharm_type), [size(array_signals, 1) 1]), 2) * 4*pi;
+        s_breve(:, n^2+n+m+1) = sum(array_signals .* repmat(grid_weights .* sphharm(n, m, beta, alpha, 'real'), [size(array_signals, 1) 1]), 2) * 4*pi;
         
         % If the microphone placement grid is irregular, you might want to try a
         % least-squares fit as performed in the script
