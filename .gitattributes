@@ -1,3 +1,1 @@
-resources/ema_recording_chalmers.mat filter=lfs diff=lfs merge=lfs -text
-resources/eigenmike_walking_around.mat filter=lfs diff=lfs merge=lfs -text
 out_ambisonics.wav filter=lfs diff=lfs merge=lfs -text
