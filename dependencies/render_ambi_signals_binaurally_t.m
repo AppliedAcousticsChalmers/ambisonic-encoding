@@ -36,7 +36,7 @@ end
 
 SOFAstart;
 
-hrirs_sofa = SOFAload('resources/HRIR_L2702.sofa');
+hrirs_sofa = SOFAload(hrir_path);
 
 % extract irs
 hrirs_l = squeeze(hrirs_sofa.Data.IR(:, 1, :)).';
