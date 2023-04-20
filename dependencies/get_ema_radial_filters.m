@@ -16,7 +16,7 @@ function [ema_inv_rf, ema_inv_rf_t] = get_ema_radial_filters(k, R, N, limit_db, 
 
 
 % ----------------------- Compute the terms b_n, Eq. (7) ------------------
-b_n = zeros(size(k, 1), N+1);
+b_n = zeros(size(k, 1), N+1, 'like', 1j);
 
 kR = k.*R + 5*eps; % add 5*eps to avoid undefined values for the Hankel function
 
@@ -52,7 +52,7 @@ end
 
 % ------------ Compute the inverse EMA radial filters, Eq. (13) -----------
 
-ema_rf = zeros(size(b_n, 1), 2*N+1);
+ema_rf = zeros(size(b_n, 1), 2*N+1, 'like', b_n);
 
 for m = -N : N
     for n_prime = abs(m) : N
