@@ -51,29 +51,30 @@ b_n_inv = 1./b_n;
 
 % ----------------------------- limiting ----------------------------------
 if limit_db < inf
-    
+
+    limit = 10^(limit_db/20);
+
     % --- soft clipping ---
-    if strcmp(reg_type, 'soft')
-    
-        b_n_inv = (2*10^(limit_db/20)) / pi * b_n_inv ./ abs(b_n_inv) .* atan(pi/(2*10^(limit_db/20)) .* abs(b_n_inv));
-        
+    if strcmpi(reg_type, 'soft')
+
+         b_n_inv = (2*limit)/pi * b_n_inv ./ abs(b_n_inv) .* atan(pi/(2*limit) .* abs(b_n_inv));
+
     % --- hard clipping ---
-    elseif strcmp(reg_type, 'hard')
-        
-        b_n_inv(abs(b_n_inv) > 10^(limit_db/20)) = b_n_inv(abs(b_n_inv) > 10^(limit_db/20)) ./ abs(b_n_inv(abs(b_n_inv) > 10^(limit_db/20))) * 10^(limit_db/20); 
-        
+    elseif strcmpi(reg_type, 'hard')
+
+        indices = abs(b_n_inv) > limit;
+        b_n_inv(indices) = b_n_inv(indices) ./ abs(b_n_inv(indices)) * limit;
+
     % --- Tikhonov regularization as used in (Moreau, Daniel, Bertet, AES 2006) ---
-    elseif strcmp(reg_type, 'tikhonov')
-        
-       limit          = 10^(limit_db/20);
-       lambda_squared = (1 - sqrt(1 - 1/limit^2)) ./ (1 + sqrt(1 - 1/limit^2));
-       
-       b_n_inv     = conj(b_n) ./ (abs(b_n).^2 + lambda_squared);      
-    
+    elseif strcmpi(reg_type, 'tikhonov')
+
+        lambda_squared = (1 - sqrt(1 - 1/limit^2)) ./ (1 + sqrt(1 - 1/limit^2));
+        b_n_inv = conj(b_n) ./ (abs(b_n).^2 + lambda_squared);
+
     else
-        
+
         error('Unknown reg_type.');
-        
+
     end
 
 end
