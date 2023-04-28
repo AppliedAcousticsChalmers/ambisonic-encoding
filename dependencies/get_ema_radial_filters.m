@@ -14,18 +14,17 @@ function [ema_inv_rf, ema_inv_rf_t] = get_ema_radial_filters(k, R, N, limit_db, 
 %
 % Written by Jens Ahrens, 2022
 
-
 % ----------------------- Compute the terms b_n, Eq. (7) ------------------
 b_n = zeros(size(k, 1), N+1, 'like', 1j);
 
 kR = k.*R + 5*eps; % add 5*eps to avoid undefined values for the Hankel function
 
 for n = 0 : N
-       
+
     hankel_prime = 1/(2*n+1) * (n * sphbesselh(n-1, hankel_type, kR) - (n+1) * sphbesselh(n+1, hankel_type, kR));
-    
+
     b_n(:, n+1) = 1i./kR.^2 .* 1./hankel_prime;
-    
+
     if hankel_type == 1
         b_n(:, n+1) =   4*pi * 1i^(-n) .* b_n(:, n+1);
     elseif hankel_type == 2
@@ -33,7 +32,7 @@ for n = 0 : N
     else 
         error('Unknown hankel_type.');
     end
-    
+
 end
 
 % ----------------- catch possible NaNs (can occur for N > 19) ------------
@@ -47,18 +46,20 @@ if ~isempty(indices)
 
 end
 
-
 % ------------ Compute the inverse EMA radial filters, Eq. (13) -----------
-
 ema_rf = zeros(size(b_n, 1), 2*N+1, 'like', b_n);
 
 for m = -N : N
+
     for n_prime = abs(m) : N
+
         ema_rf(:, m+N+1) = ema_rf(:, m+N+1) + b_n(:, n_prime+1) .* N_nm(n_prime, m, pi/2).^2;
+
     end
+
 end
 
-
+% -------------------------------invert -----------------------------------
 ema_inv_rf = 1./ema_rf;
 
 % ----------------------------- limiting ----------------------------------
@@ -103,19 +104,13 @@ if ~isempty(indices)
 end
 
 % --------------------------- make filters causal -------------------------
-
 ema_inv_rf_sym = [ema_inv_rf; conj(flipud(ema_inv_rf(2:end-1, :)))];
-
-ema_inv_rf_t = ifft(ema_inv_rf_sym, [], 1, 'symmetric'); 
-
-filter_length = size(ema_inv_rf_t, 1);
+ema_inv_rf_t = ifft(ema_inv_rf_sym, 'symmetric');
 
 % make causal (we assume that the filter_length is 2048 or longer)
-ema_inv_rf_t = circshift(ema_inv_rf_t, [filter_length/2 0]);
+ema_inv_rf_t = circshift(ema_inv_rf_t, size(ema_inv_rf_t, 1)/2);
 
-ema_inv_rf = fft(ema_inv_rf_t, [], 1);
+ema_inv_rf = fft(ema_inv_rf_t);
 ema_inv_rf = ema_inv_rf(1:end/2+1, :);
 
 end
-
-

@@ -20,19 +20,19 @@ b_n = zeros(size(k, 1), N+1, 'like', 1j);
 kR = k.*R + 5*eps; % add 5*eps to avoid undefined values for the Hankel function
 
 for n = 0 : N
-       
+
     hankel_prime = 1/(2*n+1) * (n * sphbesselh(n-1, hankel_type, kR) - (n+1) * sphbesselh(n+1, hankel_type, kR));
-         
+
     b_n(:, n+1) = 1i./kR.^2 .* 1./hankel_prime;
-    
+
     if hankel_type == 1
-        b_n(:, n+1) =   4*pi * 1i^(-n) .* b_n(:, n+1);
+        b_n(:, n+1) =   4*pi * 1i^(-n) .* b_n(:, n+1);s
     elseif hankel_type == 2
         b_n(:, n+1) = - 4*pi * 1i^n    .* b_n(:, n+1);
     else 
         error('Unknown hankel_type.');
     end
-    
+
 end
 
 % ----------------- catch possible NaNs (can occur for N > 19) ------------
@@ -46,7 +46,7 @@ if ~isempty(indices)
 
 end
 
-% invert
+% -------------------------------invert -----------------------------------
 b_n_inv = 1./b_n;
 
 % ----------------------------- limiting ----------------------------------
@@ -91,19 +91,13 @@ if ~isempty(indices)
 end
 
 % --------------------------- make filters causal -------------------------
-
 b_n_inv_sym = [b_n_inv; conj(flipud(b_n_inv(2:end-1, :)))];
-
-b_n_inv_t = ifft(b_n_inv_sym, 'symmetric'); 
-
-filter_length = size(b_n_inv_t, 1);
+b_n_inv_t = ifft(b_n_inv_sym, 'symmetric');
 
 % make causal (we assume that the filter_length is 2048 or longer)
-b_n_inv_t = circshift(b_n_inv_t, [filter_length/2 0]);
+b_n_inv_t = circshift(b_n_inv_t, size(b_n_inv_t, 1)/2);
 
 b_n_inv = fft(b_n_inv_t);
 b_n_inv = b_n_inv(1:end/2+1, :);
 
 end
-
-
