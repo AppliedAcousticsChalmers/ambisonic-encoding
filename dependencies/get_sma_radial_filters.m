@@ -39,13 +39,11 @@ end
 indices = find(isnan(b_n));
 
 if ~isempty(indices)
-    warning('%d occurrence(s) of NaN deteced in high-order radial filters. Applying a fix.', length(indices));
 
-   for index = indices
-       % this usually occurs at the DC bin, so replace that one.
-       b_n(index) = abs(b_n(index+1));    
-   end
-   
+    warning('%d occurrence(s) of NaN deteced in high-order radial filters. Applying a fix.', length(indices));
+    % this usually occurs at the DC bin, so replace that one.
+    b_n(indices) = abs(b_n(indices+1));
+
 end
 
 % invert
@@ -84,13 +82,11 @@ end
 indices = find(isnan(b_n_inv));
 
 if ~isempty(indices)
-    warning('%d more occurrence(s) of NaN deteced in high-order radial filters. Applying a fix.', length(indices));
 
-   for index = indices
-       % this usually occurs at the DC bin, so replace that one.
-       b_n_inv(index) = abs(b_n_inv(index+1));    
-   end
-   
+    warning('%d more occurrence(s) of NaN deteced in high-order radial filters. Applying a fix.', length(indices));
+    % this usually occurs at the DC bin, so replace that one.
+    b_n_inv(indices) = abs(b_n_inv(indices+1));
+
 end
 
 % --------------------------- make filters causal -------------------------
