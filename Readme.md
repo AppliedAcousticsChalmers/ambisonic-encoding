@@ -1,5 +1,7 @@
 # Ambisonic Encoding of Signals From Higher-Order Microphone Arrays
 
+NB: See the branch 'octave' for a version that works in Octave.
+
 ## Spherical Microphone Arrays With a Spherical Baffle
 
 The MATLAB script `render_sma_to_ambisonics.m` demonstrates how to compute ambisonic signals from the signals that are captured by the microphones of a classical spherical microphone array with a rigid spherical baffle. 
@@ -19,7 +21,7 @@ In Reaper,
 - Set `Mode` to `Local port [receive only]`
 - Set `Local listen port`: `8000`
 
-Note that the example implementation of the rendering that we provide does not comprise any form of equalization, which is usually useful to mitigate the effects of spherical harmonic order truncation and spatial aliasing. Thamas Deppisch provides a MATLAB implementation of eMagLS on [his GitHub repository](https://github.com/thomasdeppisch/eMagLS) that does exactly this. 
+Note that the example implementation of the rendering that we provide does not comprise any form of equalization, which is usually useful to mitigate the effects of spherical harmonic order truncation and spatial aliasing. Thomas Deppisch provides a MATLAB implementation of eMagLS on [his GitHub repository](https://github.com/thomasdeppisch/eMagLS) that does exactly this. 
 
 ## Equatorial Microphone Arrays With a Spherical Baffle
 
@@ -38,5 +40,5 @@ We will shortly provide a MATLAB implementation of eMagLS for EMAs.
 We thank Reality Labs for funding the initial work on the EMA concept.
 
 ## License
-The content of this repository is licensed under the terms of the MIT license. Please consult the file LICENSE for more information about this license.
+The content of this repository is licensed under the terms of the MIT license. Please consult the file [LICENSE](LICENSE) for more information about this license.
  
