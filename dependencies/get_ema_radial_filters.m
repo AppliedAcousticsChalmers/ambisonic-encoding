@@ -109,7 +109,7 @@ end
 
 ema_inv_rf_sym = [ema_inv_rf; conj(flipud(ema_inv_rf(2:end-1, :)))];
 
-ema_inv_rf_t = ifft(ema_inv_rf_sym, [], 1, 'symmetric'); 
+ema_inv_rf_t = real(ifft(ema_inv_rf_sym, [], 1)); 
 
 filter_length = size(ema_inv_rf_t, 1);
 

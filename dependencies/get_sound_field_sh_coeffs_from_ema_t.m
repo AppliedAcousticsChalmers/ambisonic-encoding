@@ -25,8 +25,11 @@ for m = 1 : N
 end
 
 % --------------------------- Evaluate Eq. (13) ---------------------------
+s_ring_bar_m = zeros(size(s_ring_m_surf));
 
-s_ring_bar_m = fftfilt(ema_inv_rf_t, s_ring_m_surf);
+for l = 1 : size(ema_inv_rf_t, 2)
+    s_ring_bar_m(:, l) = fftfilt(ema_inv_rf_t(:, l), s_ring_m_surf(:, l));
+end
 
 % --------------------------- Evaluate Eq. (15) ---------------------------
 

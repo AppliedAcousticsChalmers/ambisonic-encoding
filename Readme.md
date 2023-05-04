@@ -1,5 +1,7 @@
 # Ambisonic Encoding of Signals From Higher-Order Microphone Arrays
 
+NB: This is the preliminary version for Octave. For it to work, you'll need to have netcdf installed (SOFA needs that). On macos, you can get it, for example, via `brew install netcdf`. Then, you'll need to run `pkg install -forge netcdf` in Octave. The scripts in this repository comprise a call to `pkg load netcdf`, which is required after each startup of Octave. Interestingly, I have to call `pkg install -forge netcdf` after each startup, too, for the package to be loaded. You'll, of course, also need to have the [SOFAtoolbox](https://sourceforge.net/projects/sofacoustics/) in the Octave path.
+
 ## Spherical Microphone Arrays With a Spherical Baffle
 
 The MATLAB script `render_sma_to_ambisonics.m` demonstrates how to compute ambisonic signals from the signals that are captured by the microphones of a classical spherical microphone array with a rigid spherical baffle. 
@@ -38,5 +40,4 @@ We will shortly provide a MATLAB implementation of eMagLS for EMAs.
 We thank Reality Labs for funding the initial work on the EMA concept.
 
 ## License
-The content of this repository is licensed under the terms of the MIT license. Please consult the file LICENSE for more information about this license.
- 
+The content of this repository is licensed under the terms of the MIT license. Please consult the file (LICENSE)[LICENSE] for more information about this license.

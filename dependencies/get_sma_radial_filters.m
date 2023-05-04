@@ -97,7 +97,7 @@ end
 
 b_n_inv_sym = [b_n_inv; conj(flipud(b_n_inv(2:end-1, :)))];
 
-b_n_inv_t = ifft(b_n_inv_sym, 'symmetric'); 
+b_n_inv_t = real(ifft(b_n_inv_sym)); 
 
 filter_length = size(b_n_inv_t, 1);
 

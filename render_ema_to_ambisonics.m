@@ -21,6 +21,8 @@ clear;
 %
 % (c) 2022 by Jens Ahrens
 
+pkg load netcdf;
+
 addpath('dependencies/');
 
 % ----------------------------- Input data --------------------------------
@@ -74,5 +76,3 @@ out_lr = render_ambi_signals_binaurally_t(ambi_signals, head_orientation, N, 'tr
 out_lr = out_lr / max(abs(out_lr(:)));
 out_file_name = 'out_ema_binaural.wav';  
 audiowrite(out_file_name, out_lr, fs);
-
-

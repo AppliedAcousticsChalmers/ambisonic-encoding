@@ -14,6 +14,8 @@ clear;
 %
 % (c) 2022 by Jens Ahrens
 
+pkg load netcdf;
+
 addpath('dependencies/');
 
 % ----------------------------- Input data --------------------------------
