@@ -35,10 +35,9 @@ The MATLAB script uses a reformulation of the equatorial array solution that is 
 
 If you execute the scripts then the microphone signals from [this recording](https://youtu.be/95qDd13pVVY?t=58) will be encoded into 7th-order ambisonics and stored in the file `out_ambisonics.wav`, which is the same file that is mentioned above (it is getting overwritten). Start Reaper after computing the signals so that it loads the updated ones. The binaural preview will be stored in `out_ema_binaural.wav`.
 
-We will shortly provide a MATLAB implementation of eMagLS for EMAs.
+eMagLS for EMAs is also available in [Tommi's repository](https://github.com/thomasdeppisch/eMagLS). 
 
 We thank Reality Labs for funding the initial work on the EMA concept.
 
 ## License
 The content of this repository is licensed under the terms of the MIT license. Please consult the file [LICENSE](LICENSE) for more information about this license.
- 
