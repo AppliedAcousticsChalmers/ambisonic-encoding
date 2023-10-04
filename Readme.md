@@ -1,6 +1,8 @@
 # Ambisonic Encoding of Signals From Higher-Order Microphone Arrays
 
-NB: See the branch 'octave' for a version that works in Octave.
+NB: 
+* You will need 'git LFS' if you want to checkout all of the large data files. Install it with `git lfs install`. If you are still experiencing problems, use `git lfs pull` instead of `git pull`.
+* See the branch 'octave' for a version that works in Octave.
 
 ## Spherical Microphone Arrays With a Spherical Baffle
 
