@@ -1,5 +1,6 @@
 function [out_lr] = render_ambi_signals_binaurally_t(ambi_signals, head_orientation_azimuth, N, fit_type)
 % fit_type: 'transform_integral' or 'ls'
+% head_orientation_azimuth: angle in radians
 %
 % So far, this function works only for sphharm_type = 'real'. It is not
 % conventient to extend it for complex SHs because this would produce

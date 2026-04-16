@@ -1,4 +1,6 @@
-function [s_breve] = get_sound_field_sh_coeffs_from_ema_t(array_signals, ema_inv_rf_t, N, alpha_ema)
+function [s_ring_nm] = get_sound_field_sh_coeffs_from_ema(array_signals, N, alpha_ema)
+% Creates ambisonic signals that have not been radially filtered yet
+%
 % The equation numbers refer to 
 % 
 %   Jens Ahrens, "Ambisonic Encoding of Signals From Equatorial Microphone
@@ -24,17 +26,14 @@ for m = 1 : N
     s_ring_m_surf(:, m+N+1) = sum(array_signals .* sqrt(2) .* cos(m .* alpha_ema), 2) / size(alpha_ema, 2);
 end
 
-% --------------------------- Evaluate Eq. (13) ---------------------------
 
-s_ring_bar_m = fftfilt(ema_inv_rf_t, s_ring_m_surf);
+% ---------------- Conversion from s_ring_m to s_ring_nm ------------------
 
-% --------------------------- Evaluate Eq. (15) ---------------------------
-
-s_breve = zeros(size(s_ring_bar_m, 1), (N+1)^2);
+s_ring_nm = zeros(size(s_ring_m_surf, 1), (N+1)^2);
 
 for n = 0 : N
     for m = -n : n % for m = -n : 2 : n
-        s_breve(:, n^2+n+m+1) = s_ring_bar_m(:, m+N+1) .* N_nm(n, m, pi/2);
+        s_ring_nm(:, n^2+n+m+1) = s_ring_m_surf(:, m+N+1) .* N_nm(n, m, pi/2);
     end
 end
 

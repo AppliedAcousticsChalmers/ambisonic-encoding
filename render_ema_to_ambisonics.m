@@ -27,7 +27,6 @@ addpath('dependencies/');
 
 % load the variables array_signals, fs, N, R, alpha_ema
 load('resources/ema_recording_chalmers.mat');
-
 % alpha_ema: azimuth of microphone positions in rad
 
 % ----------------------------- Preparations ------------------------------
@@ -36,20 +35,23 @@ hankel_type = 2;
 
 radial_filter_length = 2048;
 
+gain_limit_radial_filters_dB = 40; % This is equivalent to 18 dB for the SMA.
+reg_type_radial_filters = 'tikhonov';
+
 f = linspace(0, fs/2, radial_filter_length/2 + 1).'; 
 c = 343;
 k = 2*pi*f/c;
 
-% -------------------- Precompute the radial filters ----------------------
+% ------------------ Precompute the 3D radial filters ---------------------
 
-gain_limit_radial_filters_dB = 40; % This is equivalent to 18 dB for the SMA.
-reg_type_radial_filters = 'tikhonov';
-
-[~, ema_inv_rf_t] = get_ema_radial_filters(k, R, N, gain_limit_radial_filters_dB, reg_type_radial_filters, hankel_type);
+[~, radial_filter_ir] = get_ema_baffled_radial_filters(k, R, N, gain_limit_radial_filters_dB, reg_type_radial_filters, hankel_type);
 
 % ------------------------ Get the ambisonic signals ----------------------
 
-ambi_signals = get_sound_field_sh_coeffs_from_ema_t(array_signals, ema_inv_rf_t, N, alpha_ema);
+ambi_signals_pre = get_sound_field_sh_coeffs_from_ema(array_signals, N, alpha_ema);
+ambi_signals     = perform_radial_filtering_t(ambi_signals_pre, radial_filter_ir);
+
+clear ambi_signals_pre;
 
 % --------------------- Normalize the ambisonic signals -------------------
 
@@ -68,7 +70,7 @@ audiowrite(out_file_name, ambi_signals, fs);
 % artifacts due to spherical harmonic order truncation and spatial
 % aliasing. We'll add this in the future. 
 
-head_orientation = 0;
+head_orientation = 0; % radians
 out_lr = render_ambi_signals_binaurally_t(ambi_signals, head_orientation, N, 'transform_integral');
 
 out_lr = out_lr / max(abs(out_lr(:)));

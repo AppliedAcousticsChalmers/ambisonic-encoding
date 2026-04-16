@@ -1,7 +1,7 @@
-function [s_breve] = get_sound_field_sh_coeffs_from_sma_t(array_signals, sma_inv_rf_t, N, beta, alpha, grid_weights)
+function [s_ring_nm] = get_sound_field_sh_coeffs_from_sma(array_signals, N, beta, alpha, grid_weights)
 %
-% The function assumes that the grid_weights are normalized such that they 
-% sum up to 1.
+% The function works in both time domain and frequancy domain. It assumes 
+% that the grid_weights are normalized such that they sum up to 1.
 %
 % It makes no real sense to use it with anything other than sphharm_type =
 % 'real'.
@@ -16,20 +16,18 @@ function [s_breve] = get_sound_field_sh_coeffs_from_sma_t(array_signals, sma_inv
 
 % --------------------------- Evaluate Eq. (10) ---------------------------
 
-s_breve = zeros(size(array_signals, 1), (N+1)^2);
+s_ring_nm = zeros(size(array_signals, 1), (N+1)^2);
 
 for n = 0 : N 
     for m = -n : n        
         
         % evaluate the transformation integral discretely
-        s_breve(:, n^2+n+m+1) = sum(array_signals .* repmat(grid_weights .* sphharm(n, m, beta, alpha, 'real'), [size(array_signals, 1) 1]), 2) * 4*pi;
+        s_ring_nm(:, n^2+n+m+1) = sum(array_signals .* repmat(grid_weights .* sphharm(n, m, beta, alpha, 'real'), [size(array_signals, 1) 1]), 2) * 4*pi;
         
         % If the microphone placement grid is irregular, you might want to try a
         % least-squares fit as performed in the script
         % render_ambi_signals_binaurally_t.m.
 
-        s_breve(:, n^2+n+m+1) = fftfilt(sma_inv_rf_t(:, n+1), s_breve(:, n^2+n+m+1));
-        
     end
 end
 

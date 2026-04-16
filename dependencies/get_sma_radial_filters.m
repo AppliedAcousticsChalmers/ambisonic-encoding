@@ -1,4 +1,4 @@
-function [b_n, b_n_inv, b_n_inv_t] = get_sma_radial_filters(k, R, N, limit_db, reg_type, hankel_type)
+function [b_n, b_n_inv, b_n_inv_t, mask_f] = get_sma_radial_filters(k, R, N, limit_db, reg_type, hankel_type)
 % b_n is given by Eq. (6). b_n_inv and b_n_inv_t are the inverse of that in
 % frequency domain and time domain, respectively.
 %
@@ -38,16 +38,19 @@ end
 % ----------------- catch possible NaNs (can occur for N > 19) ------------
 indices = find(isnan(b_n));
 
+% this tends to occur for n > 19
 if ~isempty(indices)
 
     warning('%d occurrence(s) of NaN deteced in high-order radial filters. Applying a fix.', length(indices));
     % this usually occurs at the DC bin, so replace that one.
-    b_n(indices) = abs(b_n(indices+1));
+    b_n(indices) = real(b_n(indices+1));
 
 end
 
 % -------------------------------invert -----------------------------------
 b_n_inv = 1./b_n;
+
+b_n_inv_no_limit = b_n_inv;
 
 % ----------------------------- limiting ----------------------------------
 if limit_db < inf
@@ -86,9 +89,13 @@ if ~isempty(indices)
 
     warning('%d more occurrence(s) of NaN deteced in high-order radial filters. Applying a fix.', length(indices));
     % this usually occurs at the DC bin, so replace that one.
-    b_n_inv(indices) = abs(b_n_inv(indices+1));
+    b_n_inv(indices) = real(b_n_inv(indices+1));
 
 end
+
+% compute regularization mask (to be used by EMAs); avoid any spurious
+% imaginary parts
+mask_f = real(b_n_inv ./ b_n_inv_no_limit);
 
 % --------------------------- make filters causal -------------------------
 b_n_inv_sym = [b_n_inv; conj(flipud(b_n_inv(2:end-1, :)))];

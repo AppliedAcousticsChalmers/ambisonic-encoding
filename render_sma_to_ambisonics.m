@@ -39,11 +39,14 @@ k = 2*pi*f/c;
 gain_limit_radial_filters_dB = 20;
 reg_type_radial_filters = 'tikhonov';
 
-[~, ~, b_n_inv_t] = get_sma_radial_filters(k, R, N, gain_limit_radial_filters_dB, reg_type_radial_filters, hankel_type);
+[~, ~, radial_filter_ir] = get_sma_radial_filters(k, R, N, gain_limit_radial_filters_dB, reg_type_radial_filters, hankel_type);
 
 % ------------------------ Get the ambisonic signals ----------------------
 
-ambi_signals = get_sound_field_sh_coeffs_from_sma_t(array_signals, b_n_inv_t, N, beta_sma, alpha_sma, grid_weights_array);
+ambi_signals_pre = get_sound_field_sh_coeffs_from_sma(array_signals, N, beta_sma, alpha_sma, grid_weights_array);
+ambi_signals     = perform_radial_filtering_t(ambi_signals_pre, radial_filter_ir);
+
+clear ambi_signals_pre;
 
 % --------------------- Normalize the ambisonic signals -------------------
 
