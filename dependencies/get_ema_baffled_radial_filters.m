@@ -65,7 +65,7 @@ ema_inv_rf = zeros(size(ema_inv_rf_m, 1), (N+1)^2);
 
 % get the radial filter regularization (convert limit_db to SMA convention)
 % See AES AVARIG, 2026 paper
-[~, ~, ~, radial_filter_mask] = get_sma_radial_filters(k, R, N, limit_db-22, reg_type, hankel_type);
+[~, ~, ~, radial_filter_mask] = get_sma_radial_filters(k*R, N, limit_db-22, reg_type, hankel_type);
 
 for n = 0 : N
     for m = -n : n

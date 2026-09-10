@@ -1,4 +1,4 @@
-function [b_n, b_n_inv, b_n_inv_t, mask_f] = get_sma_radial_filters(k, R, N, limit_db, reg_type, hankel_type)
+function [b_n, b_n_inv, b_n_inv_t, mask_f] = get_sma_radial_filters(kR, N, limit_db, reg_type, hankel_type)
 % b_n is given by Eq. (6). b_n_inv and b_n_inv_t are the inverse of that in
 % frequency domain and time domain, respectively.
 %
@@ -15,9 +15,9 @@ function [b_n, b_n_inv, b_n_inv_t, mask_f] = get_sma_radial_filters(k, R, N, lim
 % Written by Jens Ahrens, 2022
 
 % ----------------------- compute the terms b_n, Eq. (6) ------------------
-b_n = zeros(size(k, 1), N+1, 'like', 1j);
+b_n = zeros(size(kR, 1), N+1, 'like', 1j);
 
-kR = k.*R + 5*eps; % add 5*eps to avoid undefined values for the Hankel function
+kR = kR + 5*eps; % add 5*eps to avoid undefined values for the Hankel function
 
 for n = 0 : N
 

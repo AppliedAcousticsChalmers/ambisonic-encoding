@@ -4,6 +4,20 @@ NB:
 * You will need 'git LFS' if you want to checkout all of the large data files. Install it with `git lfs install`. If you are still experiencing problems, use `git lfs pull` instead of `git pull`.
 * See the branch 'octave' for a version that works in Octave.
 
+## Contents
+
+* Baffled spherical microphone arrays
+* Baffled equatorial microphone arrays
+* Unbaffled equatorial microphone arrays
+
+## Here's a Quick Demo of the Omni-Based Cardioid EMA
+
+Scroll [down](#-equatorial-microphone-arrays-without-a-baffle-(a.k.a.-the-cardioid-ema)) (and see the subfolder `wiener_filter`) for more information.
+
+[<img src="https://img.youtube.com/vi/JlNsSz053QU/maxresdefault.jpg" width="640" height="360"
+/>](https://www.youtube.com/embed/JlNsSz053QU)
+
+
 ## Spherical Microphone Arrays With a Spherical Baffle
 
 The MATLAB script `render_sma_to_ambisonics.m` demonstrates how to compute ambisonic signals from the signals that are captured by the microphones of a classical spherical microphone array with a rigid spherical baffle. 
@@ -41,5 +55,20 @@ eMagLS for EMAs is also available in [Tommi's repository](https://github.com/tho
 
 We thank Reality Labs for funding the initial work on the EMA concept.
 
+## Equatorial Microphone Arrays Without a Baffle (a.k.a. the Cardioid EMA)
+
+This one is essentially a ring of outward facing cardioid microphones. It was initially presented in this paper:
+
+> J. Ahrens, "A Baffleless Equatorial Ambisonic Microphone Array of Arbitrary Order," AES Coinf. on AVARIG, Paris, France, Jul. 2026 [[pdf]](https://research.chalmers.se/publication/553397/file/553397_Fulltext.pdf).
+
+Our first prototype was built from pairs of omnidirectional microphones as documented in this paper:
+
+> J. Ahrens, "Implementation of the Cardioid Equatorial Microphone Array Based on Omnidirectional Microphones," Forum Acusticum, Graz, Austria, Sept. 2026
+
+See the video at the top of this page for a demo of this prototype. We term it omni-based cardioid EMA or hybrid cardioid EMA. See the script `render_ema_hybrid_to_ambisonics.m`.
+
+The downside of implementing the array with omnidirectional microphones is that microphone self-noise is strongly amplified. This is why we implemented a mutlichannel Wiener filter to suppress the noise. See the subfolder `wiener_filter`. This work is very preliminary and updates will come soon.
+
 ## License
 The content of this repository is licensed under the terms of the MIT license. Please consult the file [LICENSE](LICENSE) for more information about this license.
+
